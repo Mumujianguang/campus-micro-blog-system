@@ -1,14 +1,13 @@
-import React from 'react';
-import Nav from './component/nav/index';
 import './App.less';
 import 'antd/dist/antd.css';
+import React from 'react';
+import Nav from './component/nav/nav';
 
 
 export default class App extends React.Component {
     constructor (prop) {
         super();
     }
-
 
     render () {
         return (

@@ -1,8 +1,9 @@
 import React from 'react';
 import UserButton from './userButton';
-import './index.css';
+import './nav.less';
 import { Row, Col } from 'antd';
 
+// 导航条
 export default class Nav extends React.Component {
     constructor (prop) {
         super();
@@ -12,16 +13,16 @@ export default class Nav extends React.Component {
     render () {
         return (
             <div className="navWrapper">
-                <Row>
+                <Row >
                     <Col xs={{ span: 12 }} lg={{ span: 12 }}>
-                        <div className="logo">
-                            logo
-                        </div>
+                        <div className="title">微校园</div>
                     </Col>
-                    <Col xs={{ span: 12 }} lg={{ span: 12 }}>
+                    <Col xs={{ span: 8, offset: 4 }} md={{ span: 6, offset: 6 }} lg={{ span: 5, offset: 7 }}>
                         <div className="userEnter">
-                            <UserButton type="login" />
-                            <UserButton type="register" />
+                            <div className="position_center">
+                                <UserButton type="登录" />
+                                <UserButton type="注册" />
+                            </div>
                         </div>
                     </Col>
                 </Row>
