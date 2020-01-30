@@ -1,6 +1,7 @@
+
 .navWrapper {
-    width: 90%;
-    min-width: 600px;
+    position: relative;
+    width: 1190px;
     height: 50px;
     line-height: 50px;
     box-shadow: 0 0 15px 0 rgb(243, 235, 235);
@@ -14,18 +15,25 @@
     }
 
     .userEnter {
-        position: relative;
-        height: 50px;
-        .position_center {
-            position: absolute;
-            width: 150px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            .userButton {
-                margin: 0px 5px;
-            }
+        position: absolute;
+        width: 150px;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        .userButton {
+            margin: 0px 5px;
         }
-        
     }
 }
+
+@media screen and (max-width: 1190px) {
+    .navWrapper {
+        width: 950px;
+    }
+}
+
+// @media screen and (max-width: 900px) {
+//     .navWrapper {
+//         width: 700px;
+//     }
+// }

@@ -1,0 +1,33 @@
+.leftMenuWrapper {
+    position: fixed;
+    top: 50%;
+    left: -100px;
+    width: 100px;
+    transform: translateY(-50%);
+    transition: left .3s linear;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    &.show {
+        left: 0px;
+        transition: left .3s linear;
+    }
+    
+    .showLeftMenuBtn {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        width: 40px;
+        height: 40px;
+        color: #fff;
+        font-size: 20px;
+        font-weight: bolder;
+        background-color: rgb(164, 230, 235);
+        border-radius: 50%;
+        border: 1px solid rgb(255, 255, 255);
+        transform: translate(55%, -50%);
+        outline: none;
+        &:hover {
+            background-color: rgb(198, 228, 241);
+        }
+    }
+}

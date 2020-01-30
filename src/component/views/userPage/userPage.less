@@ -1,0 +1,57 @@
+
+
+.userPageWrapper {
+    & > div {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .selectBox {
+        position: relative;
+        width: calc(100% - 400px);
+        height: 590px;
+        border: 1px solid black;
+        padding: 20px;
+        overflow: auto;
+        & ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .hide {
+            display: none;
+        }
+        .loadingMask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 590px;
+            background-color: rgba(0, 0, 0, .3);
+            .curPageIsLoading {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                .ant-spin-dot-spin {
+                    width: 80px;
+                    height: 80px;
+                    .ant-spin-dot-item {
+                        width: 30px;
+                        height: 30px;
+                    }
+                }
+                
+            }
+        }
+        
+    }
+}
+
+@media screen and (max-width: 1190px) {
+    .userPageWrapper {
+        .selectBox {
+            width: calc(100% - 300px);
+        }
+    }
+    
+}
