@@ -74,8 +74,11 @@ export default class userFollow extends Component {
         this.props.loading();
     }
     render() {
+        const { userType } = this.props;
         return (
-            <UserBaseList type="follow" userData={ this.state.userFollowData } />
+            <UserBaseList type="follow"
+                          userType={ userType }
+                          userData={ this.state.userFollowData } />
         )
     }
 }

@@ -31,14 +31,25 @@ export default class userPage extends Component {
     // 根据curPageIndex值切换子菜单
     curPage (curPageIndex) {
         switch (curPageIndex) {
-            case 1: return <UserFollow loading={ this.showLoading } loaded={ this.hideLoading }  />;
-            case 2: return <UserFans loading={ this.showLoading } loaded={ this.hideLoading } />;
-            case 3: return <UserNote  loading={ this.showLoading } loaded={ this.hideLoading }/>;
-            case 4: return <UserSetting type={ this.props.type } 
+            case 1: return <UserFollow userType={ this.props.type } 
+                                       loading={ this.showLoading } 
+                                       loaded={ this.hideLoading } />;
+
+            case 2: return <UserFans userType={ this.props.type } 
+                                     loading={ this.showLoading } 
+                                     loaded={ this.hideLoading } />;
+
+            case 3: return <UserNote userType={ this.props.type }
+                                     loading={ this.showLoading } 
+                                     loaded={ this.hideLoading } />;
+
+            case 4: return <UserSetting userType={ this.props.type } 
                                         loading={ this.showLoading } 
                                         loaded={ this.hideLoading } />
         
-            default: return <UserNote loading={ this.showLoading } loaded={ this.hideLoading } />
+            default: return <UserNote userType={ this.props.type } 
+                                      loading={ this.showLoading } 
+                                      loaded={ this.hideLoading } />
         }
     }
 
@@ -52,6 +63,7 @@ export default class userPage extends Component {
                 </div>
                 <div className="selectBox">
                     { this.curPage(curPageIndex) }
+                    {/* 加载界面 */}
                     <div className={ `loadingMask ${ !this.state.curPageIsLoading ? "hide" : "" }`}>
                         <Spin size="large" className="curPageIsLoading" />
                     </div>

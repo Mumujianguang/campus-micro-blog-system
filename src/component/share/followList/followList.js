@@ -11,7 +11,9 @@ export default class followList extends Component {
         boundActions.createShowGlobalUserPage();
     }
     render() {
-        const { avatarImg, userNick, userSay, isFollow } = this.props.userFollowDataItem;
+        const { userType, userFollowDataItem } = this.props;  
+        const { avatarImg, userNick, userSay, isFollow } = userFollowDataItem;
+        
         return (
             
             <div className="followListBox" onClick={ this.showGlobalUserPage }>
@@ -20,7 +22,8 @@ export default class followList extends Component {
                     <p className="userNick">{ userNick }</p>
                     <span className="userSay">{ `个人简介：${ userSay }` }</span>
                 </div>
-                <LikeHeart isFollow={ isFollow  } />
+                <LikeHeart isFollow={ isFollow }
+                           userType={ userType } />
             </div>
         )
     }

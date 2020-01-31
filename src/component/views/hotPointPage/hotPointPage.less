@@ -1,0 +1,121 @@
+.hotPointPage {
+    width: 100%;
+    padding: 20px;
+    border: 1px solid black;
+    .pushDynamic {
+        width: 95%;
+        margin: auto;
+        padding-bottom: 10px;
+        border-bottom: 2px solid rgb(134, 134, 134);
+        .pushDynamicTitle {
+            .pushDynamicTitleText {
+                font-size: 18px;
+                font-weight: bold;
+                margin-right: 5px;
+            }
+            .pushDynamicTitleIcon {
+                font-size: 20px;
+            }
+        }
+
+        .selectPoint {
+            display: flex;
+            width: 95%;
+            height: 50px;
+            line-height: 50px;
+            margin: 5px auto;
+            background-color: rgb(241, 196, 136);
+            .hotPointListBox {
+                padding: 0 10px;
+                .title {
+                    font-size: 17px;
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+                .hotPointList {
+                    width: 200px;
+                    height: 30px;
+                    outline: none;
+                    border-radius: 10px;
+                }
+            }
+            .customBox {
+                .customInput {
+                    width: 200px;
+                    height: 30px;
+                    border: none;
+                    border-radius: 10px;
+                    padding-left: 5px;
+                    outline: none;
+                }
+            }
+        }
+
+        .inputModule {
+            width: 95%;
+            margin: auto;
+            .inputText {
+                width: 100%;
+                height: 100px;
+                padding: 5px;
+                border-radius: 5px;
+            }
+            .addImg {
+                width: 100%; 
+                .pushImgBox {
+                    width: 100%;
+                    margin: 10px 0;
+                    background-color: rgb(108, 124, 122);
+                    border-radius: 10px;
+                    padding: 5px 0;
+                    .pushImg {
+                        display: block;
+                        width: 200px;
+                        margin: auto;
+                        outline: none;
+                        background-color: rgb(219, 227, 230);
+                        border-radius: 10px;
+                    }
+                } 
+            }
+            .push {
+                width: 100%;
+                margin: 20px 0 0;
+                .sureBtnBox {
+                    display: flex;
+                    justify-content: space-between;
+                    width: 350px;
+                    margin: auto;
+                    .btn {
+                        width: 150px;
+                        background-color: rgb(101, 107, 114);
+                        color: aliceblue;
+                        outline: none;
+                        border: none;
+                        border-radius: 15px;
+                        transition: all .2s linear;
+                        &:hover {
+                            background-color: rgb(60, 70, 82);
+                            color: rgb(220, 238, 253);
+                            transition: all .2s linear;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .hotPointDynamic {
+        width: 95%;
+        margin: 20px auto;
+        .hotPointDynamicTitle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .hotPointDynamicList {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+    }
+}

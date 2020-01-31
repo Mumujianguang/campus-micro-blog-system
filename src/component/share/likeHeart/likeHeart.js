@@ -9,6 +9,8 @@ export default class likeHeart extends Component {
     
     changeIsFollow = (e) => {
         e.stopPropagation();
+        const { userType } = this.props; 
+        if (userType === 'other') return;
         this.setState(prevState => ({
             isFollow: !prevState.isFollow
         }))

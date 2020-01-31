@@ -31,8 +31,11 @@ export default class userFans extends Component {
     }
 
     render() {
+        const { userType } = this.props;
         return (
-            <UserBaseList type="fans" userData={ this.state.userFansData } />
+            <UserBaseList type="fans" 
+                          userType={ userType }
+                          userData={ this.state.userFansData } />
         )
     }
 }

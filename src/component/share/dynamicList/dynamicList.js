@@ -51,7 +51,7 @@ export default class dynamicList extends Component {
     
     render() {
         const { isComment, commentContent } = this.state;
-        const { imgSrc, userNick, releaseTime, content, readNum, likeNum, commentList } = this.props.dynamicItem;
+        const { topic, imgSrc, userNick, releaseTime, content, readNum, likeNum, commentList, refFrom } = this.props.dynamicItem;
         return (
             <div className="dynamicItem">
                 {/* 动态的顶部信息 */}
@@ -61,13 +61,21 @@ export default class dynamicList extends Component {
                         <span className="userNick">{ userNick }</span>
                         <span className="releaseTime">{ `发布于${ releaseTime }` }</span>
                     </div>
+                    <div className="fromTopic">
+                        <span className="fromTopicText">From</span>
+                        <span className="topic">{ `#${ topic }#` }</span>
+                    </div>
                 </div>
                 {/* 是否转发 */}
-                <div className="isRef">
-                    <span className="refText">转发自</span>
-                    <span className="userNick">{ userNick }</span>
-                    <span className="releaseTime">{ `发布于${ releaseTime }` }</span>
-                </div>
+                {
+                    refFrom ? 
+                        <div className="isRef">
+                            <span className="refText">转发自</span>
+                            <span className="userNick">{ refFrom.userNick }</span>
+                            <span className="releaseTime">{ `发布于${ refFrom.releaseTime }` }</span>
+                        </div> : null
+                }
+                
                 {/* 动态的内容 */}
                 <div className="dynamicContent">
                     <div className="text">
