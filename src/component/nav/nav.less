@@ -23,7 +23,63 @@
         .userButton {
             margin: 0px 5px;
         }
+        
     }
+    .userControl {
+        position: absolute;
+        width: 200px;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        .userWrapper {
+            display: flex;
+            border-radius: 10px;
+            background-color: rgb(211, 255, 238);
+            transition: all .2s linear;
+            &:hover {
+                box-shadow: inset 5px 5px 10px 0 rgb(113, 216, 207),
+                            inset -5px -5px 10px 0 rgb(122, 210, 216);
+                transition: all .2s linear;
+            }
+            .userNick {
+                display: inline-block;
+                width: 130px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+        }
+        .user_operation_list {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            border-radius: 15px;
+            background-color: #fff;
+            transform: translateY(-100%);
+            transition: all .2s linear;
+            z-index: -1;
+            &.show {
+                transform: translateY(0);
+                transition: all .2s linear;
+            }
+            .user_operation_list_item {
+                text-align: center;
+                height: 30px;
+                line-height: 30px;
+                border-radius: 15px;
+                transition: background-color .2s linear;
+                &:hover {
+                    background-color: rgb(234, 244, 245);
+                    transition: background-color .2s linear;
+                }
+                &:active {
+                    background-color: rgb(221, 221, 221);
+                    color: #fff;
+                }
+            }
+        }
+    }
+    
 }
 
 @media screen and (max-width: 1190px) {

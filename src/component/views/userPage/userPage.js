@@ -4,6 +4,7 @@ import UserNote from './userNote/userNote';
 import UserFollow from './userFollow/userFollow';
 import UserSetting from './userSetting/userSetting';
 import UserFans from './userFans/userFans';
+// import CookieController from 'js-cookie';
 import { Spin } from 'antd';
 import './userPage.less';
 

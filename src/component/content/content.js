@@ -8,7 +8,6 @@ import HotPointPage from '../views/hotPointPage/hotPointPage';
 import './content.less';
 
 export default class Content extends Component {
-
     
     render() {
         return (
