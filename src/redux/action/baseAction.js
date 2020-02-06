@@ -23,3 +23,20 @@ export const createUpdateLoginState = (payload) => ({
     type: actionTypes.LOGINSTATE,
     payload
 })
+
+// 初始化用户数据
+export const createInitUserInfo = (payload) => ({
+    type: actionTypes.INITUSERINFO,
+    payload
+})
+
+// 更新用户数据
+export const createUpdateUserInfo = (payload) => ({
+    type: actionTypes.UPDATEUSERINFO,
+    payload
+})
+
+// 清空用户数据
+export const createDeleteUserInfo = () => ({
+    type: actionTypes.DELETEUSERINFO
+})

@@ -38,7 +38,7 @@ export default class dynamicList extends Component {
     getComponent = () => {
         const { type, content } = this.props.dynamicItem;
         switch (type) {
-            case 'text':
+            case 'init':
                 return null;
             case 'bigImg':
                 return <BigImg imgSrc={ content.imgSrc } />;
@@ -68,7 +68,7 @@ export default class dynamicList extends Component {
                 </div>
                 {/* 是否转发 */}
                 {
-                    refFrom ? 
+                    refFrom.userNick ? 
                         <div className="isRef">
                             <span className="refText">转发自</span>
                             <span className="userNick">{ refFrom.userNick }</span>

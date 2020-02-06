@@ -12,14 +12,19 @@ export default class Nav extends React.Component {
         // 是否登录
         loginState: store.getState().loginState,
         // 是否显示用户操作栏
-        showUserOperation: false
+        showUserOperation: false,
+        userNick: '',
+        userImage: ''
     }
 
-    componentDidMount () {
+    componentDidMount () {      
         store.subscribe(() => {
+            const { userInfo } = store.getState();
             this.setState({
                 showUserOperation: false,
-                loginState: store.getState().loginState
+                loginState: store.getState().loginState,
+                userNick: userInfo.userNick || '',
+                userImage: userInfo.userImage || 'http://localhost:3000/static/media/01.4c3cc061.jpg'
             })
         })
     }
@@ -48,12 +53,14 @@ export default class Nav extends React.Component {
                 CookieController.remove('userPhone');
                 // 分发登录状态为退出
                 boundActions.createUpdateLoginState(false);
+                // 清空store中的用户数据
+                boundActions.createDeleteUserInfo();
             }
         });
     }
 
     render () {
-        const { loginState, showUserOperation } = this.state;
+        const { loginState, showUserOperation, userNick, userImage } = this.state;
         return (
             <div className="navWrapper">
                 <div className="title">微校园</div>
@@ -69,8 +76,8 @@ export default class Nav extends React.Component {
                              onMouseEnter={ this.showUserOperation }
                              onMouseLeave={ this.hideUserOperation }>
                             <div className="userWrapper">
-                                <UserAvatar imgSrc={'http://localhost:3000/static/media/01.4c3cc061.jpg'} size={ 40 } />
-                                <span className="userNick">123</span>
+                                <UserAvatar imgSrc={ userImage } size={ 40 } />
+                                <span className="userNick">{ userNick } </span>
                             </div>
                             <div className={`user_operation_list ${ showUserOperation ? "show" : "" }`}>
                                 <div className="user_operation_list_item"

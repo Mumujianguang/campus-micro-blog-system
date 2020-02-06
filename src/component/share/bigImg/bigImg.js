@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import BlankContent from '../blankContent/blankContent';
+import api from '@/api/index';
 import './bigImg.less';
 
 export default class bigImg extends Component {
@@ -28,12 +29,17 @@ export default class bigImg extends Component {
                  style={{ width, height }}
                  onMouseEnter={ this.mouseEnter }
                  onMouseLeave={ this.mouseLeave }>
-                 {
-                     imgSrc ? 
-                        <img src={ imgSrc } alt="" className="img" />
-                        :
-                        <BlankContent width="60px" height="60px" fontSize="40px" />
-                 }
+                {
+                    imgSrc ? 
+                    ( 
+                        imgSrc.indexOf('resource\\img') === -1 ?
+                        <img src={ imgSrc } alt="" className="img" /> 
+                        : 
+                        <img src={ `${api.apiPath}/getPic?path=${ imgSrc }` } alt="" className="img" />
+                    )
+                    :
+                    <BlankContent width="60px" height="60px" fontSize="40px" />
+                }
                 
             </div>
         )

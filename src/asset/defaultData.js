@@ -1,0 +1,1 @@
+export const userImg = 'http://localhost:3000/static/media/01.4c3cc061.jpg';

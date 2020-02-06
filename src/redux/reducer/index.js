@@ -32,9 +32,24 @@ const UpdateLoginStateReducer = (state = false, { type, payload }) => {
     }
 }
 
+// 更新用户数据
+const UpdateUserInfoReducer = (state = {}, { type, payload }) => {
+    switch (type) {
+        case actionType.INITUSERINFO:
+            return payload;
+        case actionType.UPDATEUSERINFO:
+            return {...state, ...payload};
+        case actionType.DELETEUSERINFO:
+            return {};
+        default:
+            return state;
+    }
+}
+
 
 export default combineReducers({
     loginState: UpdateLoginStateReducer,
     autoLogin: UpdateLoginModeReducer,
-    isShowGlobalUserPage: UpdateGlobalUserPageReducer
+    isShowGlobalUserPage: UpdateGlobalUserPageReducer,
+    userInfo: UpdateUserInfoReducer
 })

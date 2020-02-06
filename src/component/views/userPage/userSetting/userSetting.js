@@ -1,11 +1,91 @@
-import React, { Component } from 'react';
-import { Icon } from 'antd';
+import React, { Component, Fragment } from 'react';
+import { Icon, Radio, message } from 'antd';
+import CookieController from 'js-cookie';
+import { boundActions, store } from '@/redux/index';
+import api from '@/api/index';
 import './userSetting.less';
 
 export default class userSetting extends Component {
     state = {
-        readOnly: true
+        readOnly: true,
+        userNick: '',
+        userName: '',
+        userSex: 0,
+        userAge: '',
+        userSign: '',
+        QQ: '',
+        email: ''
     }
+
+    updataUserInfo = () => {
+        let { userInfo } = store.getState();
+        this.setState({
+            userNick: userInfo.userNick || '',
+            userName: userInfo.userName || '',
+            userSex: parseInt(userInfo.userSex) || 0,
+            userAge: userInfo.userAge || '',
+            userSign: userInfo.userSign || '',
+            QQ: userInfo.QQ || '',
+            email: userInfo.email || ''
+        })
+    }
+    componentDidMount () {
+        this.props.loaded();
+
+        this.updataUserInfo()
+        // store中userInfo变化时更新数据
+        store.subscribe(() => {
+            this.updataUserInfo()
+        })
+    }
+
+    componentWillUnmount () {
+        this.props.loading();
+    }
+
+    changeUserNick = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userNick: value
+        })
+    }
+    changeUserName = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userName: value
+        })
+    }
+    changeUserAge = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userAge: value
+        })
+    }
+    changeUserSex = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userSex: value
+        })
+    }
+    changeUserSign = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userSign: value
+        })
+    }
+    changeQQ = (e) => {
+        const { value } = e.target;
+        this.setState({
+            QQ: value
+        })
+    }
+    changeEmail = (e) => {
+        const { value } = e.target;
+        this.setState({
+            email: value
+        })
+    }
+    
 
     setCanWrite = () => {
         this.setState({
@@ -14,23 +94,45 @@ export default class userSetting extends Component {
     }
 
     saveUserInfo = () => {
+        let { userNick, userName, userSex, userAge, userSign, QQ, email } = this.state;
+        const userPhone = CookieController.get('userPhone');
+        if (email.indexOf('@') === -1) {
+            message.warning('邮箱格式不正确！');
+            return;
+        }
         // 发送请求保存用户信息
-        
+        userAge = parseInt(userAge);
+        QQ = parseInt(QQ);
+        const updateUserInfo = {
+            userNick, 
+            userName, 
+            userSex, 
+            userAge, 
+            userSign, 
+            QQ, 
+            email
+        }
+        api.setUserInfo({userPhone, ...updateUserInfo})
+            .then(result => {
+                const { msg } = result.data;
+                if (msg !== 'ok') {
+                    message.error('更新信息失败！');
+                    return;
+                }
+                message.success('更新信息成功！');
+                // 分发更新后的用户信息，同步store中的数据
+                boundActions.createUpdateUserInfo(updateUserInfo);
+            })
         //
         this.setState({
             readOnly: true
         })
     }
 
-    componentDidMount () {
-        this.props.loaded();
-    }
-    componentWillUnmount () {
-        this.props.loading();
-    }
+    
 
     render() {
-        const { readOnly } = this.state;
+        const { readOnly, userNick, userName, userSex, userAge, userSign, QQ, email } = this.state;
         const { type } = this.props;
         return (
             <div className="userNote">
@@ -43,14 +145,14 @@ export default class userSetting extends Component {
                     </span>
                     {
                         type !== "other" ?
-                        <>
+                        <Fragment>
                             <span className="pageTitleLine"></span>
                             {
                                 readOnly ? 
                                     <button className="setUserInfo" onClick={ this.setCanWrite } >编辑</button> :
                                     <button className="setUserInfo" onClick={ this.saveUserInfo } >保存</button>
                             }
-                        </> : null
+                        </Fragment> : null
                     }
                 </p>
                 <div className="userNoteBox">
@@ -62,7 +164,11 @@ export default class userSetting extends Component {
                                     <span>昵称</span>
                                     <Icon type="meh" />
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <input className="itemInput" 
+                                       type="text" 
+                                       disabled={ readOnly }
+                                       value={ userNick }
+                                       onChange={ this.changeUserNick } />
                             </div>
                         </li>
                         <li className="item">
@@ -71,7 +177,11 @@ export default class userSetting extends Component {
                                     <span>真实姓名</span>
                                     <Icon type="user" />
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <input className="itemInput" 
+                                       type="text" 
+                                       disabled={ readOnly }
+                                       value={ userName }
+                                       onChange={ this.changeUserName } />
                             </div>
                         </li>
                         <li className="item">
@@ -80,16 +190,26 @@ export default class userSetting extends Component {
                                     <span>性别</span>
                                     <Icon type="man" />
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <Radio.Group className="itemInput" 
+                                             disabled={ readOnly }
+                                             value={ userSex }
+                                             onChange={ this.changeUserSex } >
+                                    <Radio value={0}>男</Radio>
+                                    <Radio value={1}>女</Radio>
+                                </Radio.Group>
                             </div>
                         </li>
                         <li className="item">
                             <div>
                                 <label className="itemLabel" htmlFor="">
-                                    <span>出生日期</span>
+                                    <span>年龄</span>
                                     <Icon type="crown" />    
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <input className="itemInput" 
+                                       type="text" 
+                                       disabled={ readOnly }
+                                       value={ userAge }
+                                       onChange={ this.changeUserAge } />
                             </div>
                         </li>
                         <li className="item">
@@ -98,7 +218,11 @@ export default class userSetting extends Component {
                                     <span>简介</span>
                                     <Icon type="container" />    
                                 </label>
-                                <textarea id="" className="itemInput userSay" disabled={ readOnly }></textarea>
+                                <textarea id="" 
+                                          className="itemInput userSay" 
+                                          disabled={ readOnly }
+                                          value={ userSign }
+                                          onChange={ this.changeUserSign }></textarea>
                             </div>
                         </li>
                     </ul>
@@ -110,7 +234,11 @@ export default class userSetting extends Component {
                                     <span>QQ</span>
                                     <Icon type="qq" />    
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <input className="itemInput" 
+                                       type="text" 
+                                       disabled={ readOnly }
+                                       value={ QQ }
+                                       onChange={ this.changeQQ } />
                             </div>
                         </li>
                         <li className="item">
@@ -119,16 +247,11 @@ export default class userSetting extends Component {
                                     <span>邮箱</span>
                                     <Icon type="mail" />    
                                 </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
-                            </div>
-                        </li>
-                        <li className="item">
-                            <div>
-                                <label className="itemLabel" htmlFor="">
-                                    <span>联系电话</span>
-                                    <Icon type="phone" />    
-                                </label>
-                                <input className="itemInput" type="text" disabled={ readOnly }/>
+                                <input className="itemInput" 
+                                       type="text" 
+                                       disabled={ readOnly }
+                                       value={ email }
+                                       onChange={ this.changeEmail } />
                             </div>
                         </li>
                     </ul>

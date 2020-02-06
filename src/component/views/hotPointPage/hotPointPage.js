@@ -3,8 +3,11 @@ import SelectAddType from '@/component/share/selectAddType/selectAddType';
 import BigImg from '@/component/share/bigImg/bigImg';
 import NineImg from '@/component/share/nineImg/nineImg';
 import DynamicList from '@/component/share/dynamicList/dynamicList';
-import dynamicListArr from '@/asset/json/dynamicList';
-import { Icon } from 'antd';
+import tools from '@/tools/index';
+import CookieController from 'js-cookie';
+import uuid from 'uuid';
+import api from '@/api/index';
+import { Icon, message } from 'antd';
 import './hotPointPage.less';
 
 export default class hotPointPage extends Component {
@@ -12,15 +15,38 @@ export default class hotPointPage extends Component {
         selectStatus: 'init',
         bigImgSrc: '',
         nineImgSrcArr: [],
-
+        // img file
+        bigImgFile: '',
+        nineImgFileArr: [],
         // select组件的当前值
         curSelectValue: '自定义',
         curSelectHotPoint: '',
-        hotPointList: ['今年寒假放几天', '锦江杯', '晒心情']
+        hotPointList: [],
+        userSay: '',
+
+        dynamicListArr: []
+    }
+
+    // 清空动态发布表单
+    initState = () => {
+        this.setState({
+            selectStatus: 'init',
+            bigImgSrc: '',
+            nineImgSrcArr: [],
+            bigImgFile: '',
+            nineImgFileArr: [],
+            curSelectValue: '自定义',
+            curSelectHotPoint: '',
+            userSay: ''
+        })
     }
     selectInit = () => {
         this.setState({
-            selectStatus: 'init'
+            selectStatus: 'init',
+            bigImgSrc: '',
+            nineImgSrcArr: [],
+            bigImgFile: '',
+            nineImgFileArr: [],
         })
     }
     selectBigImg = () => {
@@ -75,6 +101,7 @@ export default class hotPointPage extends Component {
         const img = e.target.files[0]
         if (!img) {
             this.setState({
+                bigImgFile: '',
                 bigImgSrc: ''
             })
             return
@@ -84,6 +111,7 @@ export default class hotPointPage extends Component {
         reader.readAsDataURL(img);
         reader.onload = (e) => {
             this.setState({
+                bigImgFile: img,
                 bigImgSrc: e.target.result
             })
         }
@@ -94,6 +122,7 @@ export default class hotPointPage extends Component {
         // 如果没有图片则将九宫格的图片资源清空
         if (imgArr.length === 0) {
             this.setState({
+                nineImgFileArr: [],
                 nineImgSrcArr: []
             })
             return;
@@ -110,6 +139,7 @@ export default class hotPointPage extends Component {
                 // 当完成最后一张图片的转换时，设置九宫格的图片资源
                 if (index === imgArr.length - 1) {
                     this.setState({
+                        nineImgFileArr: imgArr,
                         nineImgSrcArr: curImgArr
                     })
                 }
@@ -125,6 +155,7 @@ export default class hotPointPage extends Component {
                 curSelectValue: value,
                 curSelectHotPoint: value
             })
+            return;
         }
         this.setState({
             curSelectValue: value,
@@ -137,8 +168,94 @@ export default class hotPointPage extends Component {
             curSelectHotPoint: e.target.value
         })
     }
+    // 设置用户发表的内容
+    setUserSay = (e) => {
+        const { value } = e.target;
+        this.setState({
+            userSay: value
+        })
+    }
+    // 发布
+    pushDynamic = () => {
+        const { selectStatus, bigImgFile, bigImgSrc, nineImgSrcArr, nineImgFileArr, curSelectHotPoint, userSay } = this.state;
+        const phone = CookieController.get('userPhone');
+        if (!phone) {
+            message.warning("登录后才能发表动态嗷 ~ ");
+            return;
+        }
+        if ((selectStatus === 'bigImg' && bigImgSrc === '') || (selectStatus === 'nineImg' && nineImgSrcArr.length === 0)) {
+            message.warning("还没有上传图片哦！");
+            return;
+        } 
+        const date = new Date();
+        const nowTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}  ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        const postData = {
+            topic: curSelectHotPoint.slice(1, curSelectHotPoint.length - 1),
+            id: uuid(),
+            type: selectStatus,
+            phone: phone,
+            content: userSay,
+            push_date: nowTime
+        }
+
+        const formData = new FormData();
+        let httpPromise = null;
+
+        // 判断上传文件类型
+        if (selectStatus === 'bigImg') postData.imgFile = bigImgFile;
+        // 构造表单数据
+        for (let prop in postData) {
+            formData.append(prop, postData[prop])
+        }
+        // 多个文件比较特殊，需要挨个写入formData
+        if (selectStatus === 'nineImg') {
+            for (let item in nineImgFileArr) {
+                formData.append("imgFiles", nineImgFileArr[item]);
+            }
+        } 
+        // 判断请求类型
+        if (selectStatus === 'init') httpPromise =  api.pushDynamic(postData);
+        if (selectStatus === 'bigImg') httpPromise = api.pushDynamicBigImg(formData);
+        if (selectStatus === 'nineImg') httpPromise = api.pushDynamicNineImg(formData);
+        httpPromise
+            .then(data => {
+                console.log(data);
+                const { msg } = data.data;
+                if (msg === 'ok') {
+                    message.success("发布完成：您成功更新了动态！")
+                } else if (msg === 'error') {
+                    message.error("发布完成：遇到错误啦，更新失败！")
+                }
+                this.initState();
+            })
+    }
+    componentDidMount () {
+        // 获取话题列表
+        api.getTopicList()
+            .then(data => {
+                const { result } = data.data;
+                this.setState({
+                    hotPointList: result
+                })
+            })
+        
+        // 获取动态列表
+        api.getDynamicInfoByReadNum()
+            .then(result => {
+                const { msg } = result.data;
+                if (msg === 'ok') {
+                    console.log(result);
+                    const { data } = result.data;
+                    const dynamicListArr = data.map(item => tools.covertToDynamicInfo(item));
+                    this.setState({
+                        dynamicListArr
+                    })
+                }
+            })
+    }
+
     render() {
-        const { curSelectValue, curSelectHotPoint, hotPointList } = this.state;
+        const { curSelectValue, curSelectHotPoint, hotPointList, userSay, dynamicListArr } = this.state;
         return (
             <div className="hotPointPage">
                 {/* 发表动态 */}
@@ -179,7 +296,10 @@ export default class hotPointPage extends Component {
                     </div>
                     {/* 动态内容部分 */}
                     <div className="inputModule">
-                        <textarea className="inputText" placeholder="说点儿什么吧！"></textarea>
+                        <textarea className="inputText" 
+                                  placeholder="说点儿什么吧！"
+                                  value={ userSay }
+                                  onChange={ this.setUserSay }></textarea>
                         <div className="addImg">
                             {
                                 this.getSelectComponent()
@@ -187,7 +307,7 @@ export default class hotPointPage extends Component {
                         </div>
                         <div className="push">
                             <div className="sureBtnBox">
-                                <button className="btn submitBtn">发布</button>
+                                <button className="btn submitBtn" onClick={ this.pushDynamic }>发布</button>
                                 <button className="btn resetSelectStatus" onClick={ this.selectInit }>重置图片类型</button>
                             </div>
                         </div>
@@ -201,9 +321,12 @@ export default class hotPointPage extends Component {
                     </div>
                     <div className="hotPointDynamicList">
                         {
-                            dynamicListArr.map((item, index) => (
-                                <DynamicList dynamicItem={ item } key={ index } />
-                            ))
+                            dynamicListArr.length === 0 ? 
+                                <div>暂无内容</div>
+                                :
+                                dynamicListArr.map((item, index) => (
+                                    <DynamicList dynamicItem={ item } key={ index } />
+                                ))
                         }
                     </div>
                 </div>

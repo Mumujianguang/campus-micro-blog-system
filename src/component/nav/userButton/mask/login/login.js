@@ -46,12 +46,13 @@ export default class Login extends React.Component {
             return;
         }
         api.login(userPhone, password)
-            .then(data => {
-                const msg = data.data.msg;
-                console.log(msg);
+            .then(result => {
+                const { msg, data } = result.data;
                 if (msg === 'login success') {
                     // 分发登录状态
                     boundActions.createUpdateLoginState(true);
+                    // 初始化用户信息
+                    boundActions.createInitUserInfo(data[0]);
                     // 设置cookie
                     CookieController.set("userPhone", userPhone, { expires: 1 });
                     // 提示

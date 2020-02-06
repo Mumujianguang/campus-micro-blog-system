@@ -1,3 +1,6 @@
+
+
+
 export default [
     {
         topic: '晒心情',
@@ -5,7 +8,7 @@ export default [
             userNick: 'lala',
             releaseTime: '2019-01-02'
         },
-        type: 'text',
+        type: 'init',
         imgSrc: 'http://localhost:3000/static/media/01.4c3cc061.jpg',
         userNick: '木木',
         content: {
