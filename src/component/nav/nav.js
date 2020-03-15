@@ -2,6 +2,7 @@ import React from 'react';
 import CookieController from 'js-cookie';
 import UserButton from './userButton/userButton';
 import UserAvatar from '@/component/share/userAvatar/userAvatar';
+import api from '@/api/index';
 import { Modal } from 'antd';
 import { store, boundActions } from '@/redux/index';
 import './nav.less';
@@ -40,6 +41,13 @@ export default class Nav extends React.Component {
         })
     }
 
+    // 检查图片路径类型
+    checkImagePath = (imagePath) => {
+        const filePath = this.state[imagePath];
+        if (filePath.indexOf("resource\\img") === -1) return filePath;
+        return `${api.apiPath}/getPic?path=${filePath}`;
+    }
+
     // 退出登录
     exit = () => {
         const { confirm } = Modal;
@@ -60,7 +68,7 @@ export default class Nav extends React.Component {
     }
 
     render () {
-        const { loginState, showUserOperation, userNick, userImage } = this.state;
+        const { loginState, showUserOperation, userNick } = this.state;
         return (
             <div className="navWrapper">
                 <div className="title">微校园</div>
@@ -76,7 +84,7 @@ export default class Nav extends React.Component {
                              onMouseEnter={ this.showUserOperation }
                              onMouseLeave={ this.hideUserOperation }>
                             <div className="userWrapper">
-                                <UserAvatar imgSrc={ userImage } size={ 40 } />
+                                <UserAvatar imgSrc={ this.checkImagePath("userImage") } size={ 40 } />
                                 <span className="userNick">{ userNick } </span>
                             </div>
                             <div className={`user_operation_list ${ showUserOperation ? "show" : "" }`}>

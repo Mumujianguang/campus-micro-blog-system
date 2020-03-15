@@ -4,15 +4,41 @@ import UserNote from './userNote/userNote';
 import UserFollow from './userFollow/userFollow';
 import UserSetting from './userSetting/userSetting';
 import UserFans from './userFans/userFans';
-// import CookieController from 'js-cookie';
+import { store, boundActions } from '@/redux/index';
+import CookieController from 'js-cookie';
 import { Spin } from 'antd';
 import './userPage.less';
+import api from '../../../api';
 
 export default class userPage extends Component {
     state = {
         curPageIndex: 1,
         curPageIsLoading: true
     }
+
+    componentDidMount () {
+        const { type } = this.props;
+        if (type === 'other') {}
+
+        const { userConcernList, userFansList } = store.getState();
+        const userPhone = CookieController.get("userPhone");
+        // 如果当前store中没有用户关注列表，则发请求去查询
+        if (!userConcernList.length) {
+            api.getUserConcernList(userPhone).then(result => {
+                const { concernList } = result.data;
+                // 存入store
+                boundActions.createUpdateUserConcernList(concernList);
+            })
+        }
+        if (!userFansList.length) {
+            api.getUserFansList(userPhone).then(result => {
+                const { fansList } = result.data;
+                // 存入store
+                boundActions.createUpdateUserFansList(fansList);
+            })
+        }
+    }
+
     hideLoading = () => {
         this.setState({
             curPageIsLoading: false

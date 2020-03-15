@@ -29,13 +29,34 @@ export default class userSetting extends Component {
             email: userInfo.email || ''
         })
     }
+
+    initGlobalUserInfo = () => {
+        const { globalUserInfo } = store.getState();
+        this.setState({
+            userNick: globalUserInfo.userNick || '',
+            userName: globalUserInfo.userName || '',
+            userSex: parseInt(globalUserInfo.userSex) || 0,
+            userAge: globalUserInfo.userAge || '',
+            userSign: globalUserInfo.userSign || '',
+            QQ: globalUserInfo.QQ || '',
+            email: globalUserInfo.email || ''
+        })
+    }
+
     componentDidMount () {
         this.props.loaded();
-
-        this.updataUserInfo()
-        // store中userInfo变化时更新数据
-        store.subscribe(() => {
+        const { userType } = this.props;
+        if (userType !== "other") {
             this.updataUserInfo()
+            // store中userInfo变化时更新数据
+            store.subscribe(() => {
+                this.updataUserInfo()
+            })
+            return;
+        }
+        this.initGlobalUserInfo();
+        store.subscribe(() => {
+            this.initGlobalUserInfo();
         })
     }
 
@@ -133,18 +154,18 @@ export default class userSetting extends Component {
 
     render() {
         const { readOnly, userNick, userName, userSex, userAge, userSign, QQ, email } = this.state;
-        const { type } = this.props;
+        const { userType } = this.props;
         return (
             <div className="userNote">
                 <p className="pageTitle">
                     <Icon type="form" />
                     <span>
                         {
-                            type !== "other" ? "设置" : "个人信息"
+                            userType !== "other" ? "设置" : "个人信息"
                         }
                     </span>
                     {
-                        type !== "other" ?
+                        userType !== "other" ?
                         <Fragment>
                             <span className="pageTitleLine"></span>
                             {

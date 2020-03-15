@@ -11,6 +11,7 @@ export default [
         type: 'init',
         imgSrc: 'http://localhost:3000/static/media/01.4c3cc061.jpg',
         userNick: '木木',
+        userPhone: '18227192769',
         content: {
             text: '123'
         },
@@ -37,9 +38,14 @@ export default [
         ]
     },{
         topic: '锦江杯',
+        refFrom: {
+            userNick: 'lala',
+            releaseTime: '2019-01-02'
+        },
         type: 'bigImg',
         imgSrc: 'http://localhost:3000/static/media/01.4c3cc061.jpg',
         userNick: '木木',
+        userPhone: '18227192769',
         content: {
             text: '123',
             imgSrc: 'http://localhost:3000/static/media/01.4c3cc061.jpg'
@@ -67,9 +73,14 @@ export default [
         ]
     },{
         topic: '晒心情',
+        refFrom: {
+            userNick: 'lala',
+            releaseTime: '2019-01-02'
+        },
         type: 'nineImg',
         imgSrc: 'http://localhost:3000/static/media/01.4c3cc061.jpg',
         userNick: '木木',
+        userPhone: '18227192769',
         content: {
             text: '456',
             imgSrcArr: [

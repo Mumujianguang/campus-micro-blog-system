@@ -39,17 +39,74 @@ const UpdateUserInfoReducer = (state = {}, { type, payload }) => {
             return payload;
         case actionType.UPDATEUSERINFO:
             return {...state, ...payload};
+        case actionType.UPDATEUSERAVATARIMAGE:
+            return {...state, userImage: payload};
+        case actionType.UPDATEUSERBACKIMAGE:
+            return {...state, backImage: payload};
         case actionType.DELETEUSERINFO:
             return {};
+        case actionType.UPDATEUSERDYNAMICNUM:
+            return {...state, dynamicNum: parseInt(state.dynamicNum) + 1 };
+        case actionType.UPDATEUSERCONCERNNUM:
+            return {...state, concernNum: parseInt(state.concernNum) + payload};
         default:
             return state;
     }
 }
 
+const UpdateGlobalUserPhone = (state = "", { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEGLOBALUSERPHONE:
+            return payload;
+        default:
+            return state;
+    }
+}
+
+const UpdateGlobalUserInfo = (state = {}, { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEGLOBALUSERINFO:
+            return {...state, ...payload};
+        default:
+            return state;
+    }
+}
+
+const UpdateUserConcernList = (state = [], { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEUSERCONCERNLIST:
+            return [...payload];
+        default:
+            return state;
+    }
+}
+
+const UpdateUserFansList = (state = [], { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEUSERFANSLIST:
+            return [...payload];
+        default:
+            return state;
+    }
+}
+// 全局用户页面 用户关注列表
+const UpdateGlobalUserConcernList = (state = [], { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEGLOBALEUSERCONCERNLIST:
+            return [...payload];
+        default:
+            return state;
+    }
+}
 
 export default combineReducers({
     loginState: UpdateLoginStateReducer,
     autoLogin: UpdateLoginModeReducer,
     isShowGlobalUserPage: UpdateGlobalUserPageReducer,
-    userInfo: UpdateUserInfoReducer
+    userInfo: UpdateUserInfoReducer,
+    userConcernList: UpdateUserConcernList,
+    userFansList: UpdateUserFansList,
+    globalUserPhone: UpdateGlobalUserPhone,
+    globalUserInfo: UpdateGlobalUserInfo,
+    globalUserConcernList: UpdateGlobalUserConcernList
 })

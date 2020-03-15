@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
 import { Icon } from 'antd';
 import DynamicList from '@/component/share/dynamicList/dynamicList';
-import dynamicListArr from '@/asset/json/dynamicList';
+import CookieController from 'js-cookie';
+import tools from '@/tools/index';
+import { store } from '@/redux';
+import api from '@/api';
 import './userNote.less';
 
 export default class userNote extends Component {
     state = {
-        dynamicList: dynamicListArr
+        dynamicList: []
+    }
+    componentWillMount () {
+        const { userType } = this.props;
+        let userPhone = "";
+        if (userType === "other") {
+            userPhone = store.getState().globalUserPhone;
+        } else {
+            userPhone = CookieController.get("userPhone");
+        }
+         
+        api.getDynamicInfoByUserPhone(userPhone)
+            .then(result => {
+                const { msg } = result.data;
+                if (msg !== "ok") return;
+                const { data } = result.data;
+                this.setState({
+                    dynamicList: data.map(item => tools.covertToDynamicInfo(item))
+                })
+            })
     }
     componentDidMount () {
         this.props.loaded();

@@ -17,7 +17,8 @@ export default class userFollow extends Component {
                         userData.map((ele, index) => (
                             <FollowList userFollowDataItem={ ele }
                                         userType={ userType }
-                                        key={ index } />
+                                        key={ index }
+                                        type={ type } />
                         ))
                     }
                 </div>

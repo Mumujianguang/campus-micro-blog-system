@@ -1,78 +1,62 @@
 import React, { Component } from 'react';
 import UserBaseList from '../userBaseList/userBaseList';
+import { store, boundActions } from '@/redux/index';
+import CookieController from 'js-cookie';
+import api from '@/api';
 
 export default class userFollow extends Component {
     state = {
-        userFollowData: [
-            {
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "木木",
-                userSay: "又是元气满满的一天啊",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "啦啦啦",
-                userSay: "react",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "突如其来",
-                userSay: "喵喵",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "木木",
-                userSay: "又是元气满满的一天啊",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "啦啦啦",
-                userSay: "react",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "突如其来",
-                userSay: "喵喵",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "木木",
-                userSay: "又是元气满满的一天啊",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "啦啦啦",
-                userSay: "react",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "突如其来",
-                userSay: "喵喵",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "木木",
-                userSay: "又是元气满满的一天啊",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "啦啦啦",
-                userSay: "react",
-                isFollow: true
-            },{
-                avatarImg: "http://localhost:3000/static/media/01.4c3cc061.jpg",
-                userNick: "突如其来",
-                userSay: "喵喵",
-                isFollow: true
-            }
-        ],
+        userFollowData: []
     }
     componentDidMount () {
         this.props.loaded();
+        const { userType } = this.props;
+        if (userType === "other") {
+            const { globalUserPhone } = store.getState();
+            api.getUserConcernList(globalUserPhone).then(result => {
+                const { concernList } = result.data;
+                const userFollowData = this.dealFollowData(concernList);
+                this.setState({
+                    userFollowData
+                })
+                // 存入store
+                boundActions.createUpdateGlobalUserConcernList(concernList);
+            });
+            return;
+        }
+        // store.subscribe(() => {
+        //     this.setUserFollowData()
+        // })
+        this.setUserFollowData();
     }
-    componentWillUnmount () {
+
+    componentWillMount () {
         this.props.loading();
     }
+
+    setUserFollowData = () => {
+        const userPhone = CookieController.get("userPhone");
+        api.getUserConcernList(userPhone).then(result => {
+            const { concernList } = result.data;
+
+            const userFollowData = this.dealFollowData(concernList)
+            this.setState({
+                userFollowData
+            })
+            // 存入store
+            boundActions.createUpdateUserConcernList(concernList);
+        })
+        
+    }
+
+    dealFollowData = (userConcernList) => {
+        return userConcernList.map(item => {
+            item.isFollow = true;
+            item.userImage = item.userImage ? item.userImage : require("@/asset/img/01.jpg");
+            return {...item};
+        })
+    }
+
     render() {
         const { userType } = this.props;
         return (

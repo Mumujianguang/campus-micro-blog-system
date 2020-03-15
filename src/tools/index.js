@@ -1,18 +1,22 @@
 import * as defaultData from '@/asset/defaultData';
 
+// 动态信息列表数据转换函数
 function covertToDynamicInfo (info) {
     let { 
         topic, 
         userNick, 
         userImage, 
+        phone,
         read_num, 
         like_num, 
         type, 
-        push_date,   
+        push_date, 
+        forward_num,  
         from_releasetime, 
         from_user, 
         id,
-        content
+        content,
+        commentList
     } = info;
 
     if (type === 'init') {
@@ -40,17 +44,26 @@ function covertToDynamicInfo (info) {
             userNick: from_user,
             releaseTime: from_releasetime
         },
+        forward_num,
         type,
         imgSrc: userImage || defaultData.userImg,
         userNick,
+        userPhone: phone,
         content,
         releaseTime: push_date,
         readNum: read_num,
         likeNum: like_num,
-        commentList: []
+        commentList
     }
 }
 
+// 获取当前时间
+function getCurTime () {
+    const date = new Date();
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 export default {
-    covertToDynamicInfo
+    covertToDynamicInfo,
+    getCurTime
 }

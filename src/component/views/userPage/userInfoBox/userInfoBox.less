@@ -8,6 +8,12 @@
         width: 100%;
         height: 250px;
         border: 1px solid rgb(139, 139, 139);
+        .mix-icon () {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
         .backgroundImgBox {
             width: 100%;
             height: 200px;
@@ -20,13 +26,10 @@
                 display: block;
             }
             .loadingIcon {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
+                .mix-icon();
             }
         }
-        .avatarImg {
+        .avatarImgBox {
             position: absolute;
             left: 50%;
             bottom: 0;
@@ -34,13 +37,47 @@
             height: 100px;;
             border-radius: 50%;
             transform: translateX(-50%);
+            overflow: hidden;
+            .avatarImg {
+                width: 100%;
+                height: 100%;
+                border-radius: 50%;
+            }
+            .loadingIcon {
+                .mix-icon();
+            }
+            .updateUserAvatar {
+                position: absolute;
+                left: calc(50% - 46px);
+                bottom: 0;
+                width: 92px;
+                height: 30px;
+                line-height: 30px;
+                text-align: center;
+                font-size: 12px;
+                border-bottom-right-radius: 30px;
+                border-bottom-left-radius: 30px;
+                background-color: rgba(255, 255, 255, 0.6);
+                transition: background-color .2s linear;
+                &:hover {
+                    background-color: rgba(224, 251, 255, 0.8);
+                    transition: background-color .2s linear;
+                }
+                &:active {
+                    background-color: rgb(177, 217, 223);
+                    transition: background-color .2s linear;
+                }
+            }
         }
     }
     .userNickBox {
+        display: flex;
+        justify-content: center;
+        height: 50px;
+        line-height: 50px;
         font-size: 18px;
         font-weight: bold;
         text-align: center;
-        padding: 10px 0;
         .userNick {
             margin-right: 5px;
         }
@@ -49,6 +86,21 @@
         }
         .womanIcon {
             color: rgb(255, 79, 176);
+        }
+        .concernBtn {
+            font-size: 12px;
+            margin-left: 10px;
+            .concernText {
+                padding: 2px 10px;
+                border: 1px solid rgb(26, 160, 153);
+                border-radius: 10px;
+                transition: all linear .5s;
+                &:hover {
+                    color: rgb(255, 255, 255);
+                    background-color: rgb(168, 227, 230);
+                    transition: all linear .5s;
+                }
+            }
         }
     }
     .userSignBox {

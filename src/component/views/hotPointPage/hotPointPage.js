@@ -3,6 +3,7 @@ import SelectAddType from '@/component/share/selectAddType/selectAddType';
 import BigImg from '@/component/share/bigImg/bigImg';
 import NineImg from '@/component/share/nineImg/nineImg';
 import DynamicList from '@/component/share/dynamicList/dynamicList';
+import { boundActions } from '@/redux/index';
 import tools from '@/tools/index';
 import CookieController from 'js-cookie';
 import uuid from 'uuid';
@@ -187,15 +188,14 @@ export default class hotPointPage extends Component {
             message.warning("还没有上传图片哦！");
             return;
         } 
-        const date = new Date();
-        const nowTime = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}  ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        
         const postData = {
             topic: curSelectHotPoint.slice(1, curSelectHotPoint.length - 1),
             id: uuid(),
             type: selectStatus,
             phone: phone,
             content: userSay,
-            push_date: nowTime
+            push_date: tools.getCurTime()
         }
 
         const formData = new FormData();
@@ -212,7 +212,7 @@ export default class hotPointPage extends Component {
             for (let item in nineImgFileArr) {
                 formData.append("imgFiles", nineImgFileArr[item]);
             }
-        } 
+        }
         // 判断请求类型
         if (selectStatus === 'init') httpPromise =  api.pushDynamic(postData);
         if (selectStatus === 'bigImg') httpPromise = api.pushDynamicBigImg(formData);
@@ -222,7 +222,8 @@ export default class hotPointPage extends Component {
                 console.log(data);
                 const { msg } = data.data;
                 if (msg === 'ok') {
-                    message.success("发布完成：您成功更新了动态！")
+                    message.success("发布完成：您成功更新了动态！");
+                    boundActions.createUpdateUserDynamicNum();
                 } else if (msg === 'error') {
                     message.error("发布完成：遇到错误啦，更新失败！")
                 }
