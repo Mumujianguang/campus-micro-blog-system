@@ -8,7 +8,7 @@ export default class Mask extends React.Component {
 
     state = {
         type: this.props.type,
-        childType: (this.props.type === "登录" ? "注册" : "登录"), 
+        childType: (this.props.type === "登录" ? "用户注册" : "登录"), 
         childrenDrawer: false
     };
 

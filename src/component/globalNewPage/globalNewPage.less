@@ -1,0 +1,58 @@
+.globalNewPage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    .globalNewPageMask {
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .7);
+    }
+    .newPageBox {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 800px;
+        max-height: 95%;
+        padding: 15px;
+        overflow: auto;
+        box-sizing: border-box;
+        background-color: #fff;
+        transform: translate(-50%, -50%);
+        border-radius: 10px;
+        .newTopBox {
+            width: 100%;
+            .newTitle {
+                text-align: center;
+                font-size: 25px;
+                font-weight: bold;
+                margin: 10px 0 25px;
+            }
+            .newInfo {
+                display: flex;
+                justify-content: center;
+                color: rgb(173, 173, 173);
+                .newTime {
+                    margin-right: 20px;
+                }
+            }
+            .eventPointBox {
+                margin-top: 20px;
+            }
+        }
+
+        &::-webkit-scrollbar {/*滚动条整体样式*/
+            width: 6px;     /*高宽分别对应横竖滚动条的尺寸*/
+        }
+        &::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+            border-radius: 10px;
+            background: #57e0d9;
+        }
+        &::-webkit-scrollbar-track {/*滚动条里面轨道*/
+            border-radius: 10px;
+            background: rgb(231, 231, 231);
+        }
+    }
+}

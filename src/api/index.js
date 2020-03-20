@@ -5,6 +5,11 @@ const baseAxios = axios.create({
     baseURL: apiPath
 })
 
+// 管理员登录
+function adminLogin (postData) {
+    return baseAxios.post(`/adminLogin`, postData);
+}
+
 // 登录
 function login (userPhone, password) {
     return baseAxios.get(`/userLogin?phone=${userPhone}&password=${password}`)
@@ -129,6 +134,7 @@ function getUserFansList (phone) {
 
 export default {
     apiPath,
+    adminLogin,
     login,
     register,
     checkUserNick,

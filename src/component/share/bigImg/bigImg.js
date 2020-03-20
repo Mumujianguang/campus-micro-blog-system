@@ -6,7 +6,7 @@ import './bigImg.less';
 export default class bigImg extends Component {
     static defaultProps = {
         width: '100%',
-        height: '250px'
+        height: '300px'
     }
     state = {
         isHover: false

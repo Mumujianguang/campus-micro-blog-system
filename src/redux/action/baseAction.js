@@ -5,11 +5,19 @@ import * as actionTypes from './action-type';
  * action创建函数
  */
 export const createShowGlobalUserPage = () => ({
-    type: actionTypes.SHOW,
+    type: actionTypes.SHOW
 })
 
 export const createHideGlobalUserPage = () => ({
-    type: actionTypes.HIDE,
+    type: actionTypes.HIDE
+})
+
+export const createShowGlobalNewPage = () => ({
+    type: actionTypes.SHOWNEW
+})
+
+export const createHideGlobalNewPage = () => ({
+    type: actionTypes.HIDENEW
 })
 
 // 更新登录模式
@@ -86,6 +94,12 @@ export const createUpdateUserFansList = (payload) => ({
     type: actionTypes.UPDATEUSERFANSLIST,
     payload
 })
+
+export const createUpdatePreviewData = (payload) => ({
+    type: actionTypes.UPDATEPREVIEWDATA,
+    payload
+})
+
 
 
 

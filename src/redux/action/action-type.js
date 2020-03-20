@@ -4,6 +4,8 @@
 
 export const SHOW = "show";
 export const HIDE = "hide";
+export const SHOWNEW = "showNew";
+export const HIDENEW = "hideNew";
 export const UPDATELOGINMODE = "updateLoginMode";
 export const LOGINSTATE = "loginState";
 export const INITUSERINFO = "initUserInfo";
@@ -18,3 +20,4 @@ export const UPDATEUSERCONCERNLIST = "updateUserConcernList";
 export const UPDATEUSERFANSLIST = "updateUserFansList";
 export const UPDATEGLOBALEUSERCONCERNLIST = "updateGlobalUserConcernList";
 export const UPDATEUSERCONCERNNUM = "updateUserConcernNum";
+export const UPDATEPREVIEWDATA = "updatePreviewData";

@@ -60,10 +60,34 @@ function covertToDynamicInfo (info) {
 // 获取当前时间
 function getCurTime () {
     const date = new Date();
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hour = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    month = month < 10 ? `0${month}` : month;
+    day = day < 10 ? `0${day}` : day;
+    hour = hour < 10 ? `0${hour}` : hour;
+    minutes = minutes < 10 ? `0${minutes}` : minutes;
+    seconds = seconds < 10 ? `0${seconds}` : seconds;
+    return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
+}
+
+// 图片转base64
+function imageToBase64 (target) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(target)
+        // 转换完成的回调函数
+        reader.onload = (e) => {
+            resolve(e.target.result);
+        }
+    })
 }
 
 export default {
     covertToDynamicInfo,
-    getCurTime
+    getCurTime,
+    imageToBase64
 }

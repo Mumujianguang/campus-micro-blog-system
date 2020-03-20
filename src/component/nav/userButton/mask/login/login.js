@@ -3,14 +3,23 @@ import './login.less';
 import { Input, Icon, Button, Checkbox, message } from 'antd';
 import { boundActions, store } from '@/redux/index';
 import CookieController from 'js-cookie';
+import { withRouter } from 'react-router-dom';
 import api from '@/api/index';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
     state = {
+        loginIdentity: 'user',
         userPhone: '',
         password: '',
         autoLogin: store.getState().autoLogin
     };
+
+    changeLoginIdentity = (e) => {
+        const { value } = e.target;
+        this.setState({
+            loginIdentity: value
+        })
+    }
 
     changeCheck = (e) => {
         this.setState(prevState => ({
@@ -35,7 +44,7 @@ export default class Login extends React.Component {
         })
     }
 
-    login = () => {
+    userLogin = () => {
         const { userPhone, password } = this.state;
         if (userPhone === '' || password === '') {
             message.warning('未输入手机号或密码！');
@@ -68,8 +77,28 @@ export default class Login extends React.Component {
             })
     }
 
+    adminLogin = () => {
+        const { userPhone, password } = this.state;
+        if (!userPhone || !password) {
+            message.info("请输入管理员账号或密码！")
+            return;
+        }
+        api.adminLogin({
+            username: userPhone, 
+            password
+        }).then(result => {
+            if (result.data.msg !== 'ok') {
+                message.error("登录失败！账号或密码错误")
+                return;
+            }
+            message.success("登录成功！")
+            this.props.history.push("/admin")
+        })
+    }
+
     render () {
-        const { autoLogin, userPhone, password } = this.state;
+        const { loginIdentity, autoLogin, userPhone, password } = this.state;
+        const isUser = loginIdentity === "user";
         return (
             <div>
                 <div className="formItem">
@@ -78,36 +107,51 @@ export default class Login extends React.Component {
                     </div>
                 </div>
                 <div className="formItem">
+                    <select className="loginIdentity" value={ loginIdentity } onChange={ this.changeLoginIdentity }>
+                        <option className="logingIdentityItem" value="user">用户登录</option>
+                        <option className="logingIdentityItem" value="admin">管理员登录</option>
+                    </select>
+                </div>
+                <div className="formItem">
                     <Input
                         value={ userPhone }
                         onChange={ this.updateUserPhoneInp }
-                        placeholder="手机号"
+                        placeholder={ isUser ? "手机号" : "管理员账号" }
                         prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
                 </div>
                 <div className="formItem">
-                    <Input
+                    <Input.Password
                         value={ password }
                         onChange={ this.updatePwdInp }
                         placeholder="密码"
                         prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
                     />
                 </div>
-                <div className="formItem">
-                    <Checkbox checked={ autoLogin } onClick={ this.changeCheck }>记住我</Checkbox>
-                </div>
+                {
+                    isUser ?
+                    <div className="formItem">
+                        <Checkbox checked={ autoLogin } onClick={ this.changeCheck }>记住我</Checkbox>
+                    </div> : null
+                }
                 <div className="formItem">
                     <Button className="loginModuleButton" 
-                            type="primary"
-                            onClick={ this.login }>登录</Button>
+                        type="primary"
+                        onClick={ isUser ? this.userLogin : this.adminLogin }>登录</Button>  
                 </div>
                 <div className="formItem">
                     <Button className="loginModuleButton" type="primary">重置</Button>
                 </div>
-                <div className="formItem">
-                    <Button className="loginModuleButton" type="primary">忘记密码</Button>
-                </div>
+                {
+                    isUser ? 
+                    <div className="formItem">
+                        <Button className="loginModuleButton" type="primary">忘记密码</Button>
+                    </div> : null
+                }
+                
             </div>
         );
     }
 }
+
+export default withRouter(Login)

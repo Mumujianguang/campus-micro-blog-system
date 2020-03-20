@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Button } from 'antd';
 import Mask from './mask/mask';
 
@@ -26,7 +26,7 @@ export default class UserButton extends React.Component {
 
     render () {
         return (
-            <>
+            <Fragment>
                 <Button 
                     className="userButton" 
                     type="primary"
@@ -39,7 +39,7 @@ export default class UserButton extends React.Component {
                     isShowMask={ this.state.isShowMask } 
                     onHideMask={ this.hideMask }
                 />
-            </>
+            </Fragment>
         )
     }
 }

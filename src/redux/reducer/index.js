@@ -12,6 +12,18 @@ const UpdateGlobalUserPageReducer = (state = false, { type }) => {
             return state
     }
 };
+
+const UpdateGlobalNewPageReducer = (state = false, { type }) => {
+    switch (type) {
+        case actionType.SHOWNEW:
+            return true;
+        case actionType.HIDENEW:
+            return false;
+        default:
+            return state
+    }
+};
+
 // 更新登录模式 -- 自动/手动
 const UpdateLoginModeReducer = (state = false, { type, payload }) => {
     switch (type) {
@@ -99,14 +111,25 @@ const UpdateGlobalUserConcernList = (state = [], { type, payload }) => {
     }
 }
 
+const UpdatePreviewData = (state = {}, { type, payload }) => {
+    switch (type) {
+        case actionType.UPDATEPREVIEWDATA:
+            return {...payload};
+        default:
+            return state;
+    }
+}
+
 export default combineReducers({
     loginState: UpdateLoginStateReducer,
     autoLogin: UpdateLoginModeReducer,
     isShowGlobalUserPage: UpdateGlobalUserPageReducer,
+    isShowGlobalNewPage: UpdateGlobalNewPageReducer,
     userInfo: UpdateUserInfoReducer,
     userConcernList: UpdateUserConcernList,
     userFansList: UpdateUserFansList,
     globalUserPhone: UpdateGlobalUserPhone,
     globalUserInfo: UpdateGlobalUserInfo,
-    globalUserConcernList: UpdateGlobalUserConcernList
+    globalUserConcernList: UpdateGlobalUserConcernList,
+    previewNewsData: UpdatePreviewData
 })
