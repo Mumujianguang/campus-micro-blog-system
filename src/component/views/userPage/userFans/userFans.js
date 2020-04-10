@@ -11,7 +11,7 @@ export default class userFans extends Component {
     componentDidMount () {
         this.props.loaded();
     }
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
         this.props.loading();
 
         const { userType } = this.props;

@@ -6,6 +6,7 @@ import tools from '@/tools/index';
 import NineImg from '../nineImg/nineImg';
 import BigImg from '../bigImg/bigImg';
 import { store, boundActions } from '@/redux';
+import * as defaultData from '@/asset/defaultData';
 import api from '@/api/index';
 import uuid from 'uuid';
 import './dynamicList.less';
@@ -144,7 +145,6 @@ export default class dynamicList extends Component {
     }
 
     // 点赞
-    likeTimer = null;
     likeStatus = false;
     like = () => {
         let { id, likeNum } = this.state;
@@ -167,6 +167,7 @@ export default class dynamicList extends Component {
 
     // 检查图片路径类型
     checkImagePath = (filePath) => {
+        filePath = filePath ? filePath : defaultData.userImg
         if (filePath.indexOf("resource\\img") === -1) return filePath;
         return `${api.apiPath}/getPic?path=${filePath}`;
     }
@@ -184,6 +185,42 @@ export default class dynamicList extends Component {
             default:
                 return null;
         }
+    }
+
+    componentDidMount = () => {
+        store.subscribe(() => {
+            const newImage = store.getState().userInfo.userImage;
+            this.setState({
+                imgSrc: newImage
+            })
+        })
+    }
+
+    readTimer = null;
+    canReadStatus = true;
+    addReadNum = () => {
+        let { id, readNum } = this.state;
+        if (this.canReadStatus) {
+            api.addRead({ id, readNum: ++readNum })
+                .then(result => {
+                    console.log(result);
+                    const { msg } = result.data;
+                    if (msg === 'ok') {
+                        this.canReadStatus = false;
+                        this.setState({
+                            readNum: readNum
+                        })
+                    }
+                })
+            
+            this.readTimer = setTimeout(() => {
+                this.canReadStatus = true;
+            }, 300000)
+        }
+    }
+
+    componentWillUnmount () {
+        clearTimeout(this.readTimer);
     }
     
     render() {
@@ -204,7 +241,8 @@ export default class dynamicList extends Component {
             refFrom 
         } = this.state;
         return (
-            <div className="dynamicItem">
+            <div className="dynamicItem"
+                 onMouseEnter={ this.addReadNum }>
                 {/* 动态的顶部信息 */}
                 <div className="dynamicFrom">
                     <UserAvatar imgSrc={ this.checkImagePath(imgSrc) } size={ 40 } userPhone={ userPhone }  />

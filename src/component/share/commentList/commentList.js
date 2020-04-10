@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UserAvatar from '../userAvatar/userAvatar';
 import CookieController from 'js-cookie';
+import * as defaultData from '@/asset/defaultData';
 import api from '@/api/index';
 import './commentList.less';
 import { Icon, message, Popconfirm } from 'antd';
@@ -12,6 +13,7 @@ export default class commentList extends Component {
     }
     // 检查图片路径类型
     checkImagePath = (filePath) => {
+        filePath = filePath ? filePath : defaultData.userImg
         if (filePath.indexOf("resource\\img") === -1) return filePath;
         return `${api.apiPath}/getPic?path=${filePath}`;
     }
@@ -63,7 +65,7 @@ export default class commentList extends Component {
                  onMouseLeave={ this.hideDelCommentBtn }>
                 <div className="commentatorInfo">
                     <div className="commentatorUser">
-                        <UserAvatar imgSrc={ this.checkImagePath(userImage) } size={ 25 } />
+                        <UserAvatar imgSrc={ this.checkImagePath(userImage) } size={ 25 } userPhone={ userPhone } />
                         <div className="userNick">{ userNick }</div>
                         <div className="commentTime">{ `回复于 ${ commentTime }` }</div>
                     </div>

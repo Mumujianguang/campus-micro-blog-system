@@ -1,27 +1,14 @@
 import React, { Component } from 'react';
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import { DatePicker, Icon, message } from 'antd';
+import { DatePicker, Icon } from 'antd';
 import NewsList from '@/component/share/newsList/newsList';
 import BlankContent from '@/component/share/blankContent/blankContent';
 import './campusNews.less';
+import api from '@/api';
 
 export default class campusNews extends Component {
     state = {
-        newsList: [
-            {
-                id: '102',
-                title: '123', 
-                releaseTime: '2019-02-02'
-            },{
-                id: '103',
-                title: '123', 
-                releaseTime: '2019-02-02'
-            },{
-                id: '104',
-                title: '123', 
-                releaseTime: '2019-02-02'
-            }
-        ],
+        newsList: [],
         searchTitle: '', // 用户输入的搜索标题
         searchTime: []
     }
@@ -29,6 +16,10 @@ export default class campusNews extends Component {
     // 日期选择回调 - 更新搜索的日期区间
     onRangePickerChange = (data, dataString) => {
         console.log(data, dataString);
+        const flag = dataString.every(item => item !== "");
+        if (!flag) {
+            dataString = null;
+        }
         this.setState({
             searchTime: dataString
         })
@@ -45,18 +36,59 @@ export default class campusNews extends Component {
     // 按条件查询新闻
     searchSubmit = () => {
         const { searchTime, searchTitle } = this.state;
-        if (!searchTime.length && !searchTitle) {
-            message.info("您还没有输入查询条件嗷！")
+        if ((!searchTime || !searchTime.length) && !searchTitle) {
+            this.getNewsList()
             return;
         } 
         let paramsData = {}
         if (searchTitle) {
             paramsData.searchTitle = searchTitle;
         }
-        if (searchTime.length) {
+        if (searchTime && searchTime.length) {
             paramsData.searchTime = searchTime
         }
-        console.log(paramsData);
+        api.searchNews(paramsData).then(result => {
+            if (result.data.msg === 'ok') {
+                let { data } = result.data;
+                data = this.createNewsListData(data);
+                this.setState({
+                    newsList: data
+                })
+            }
+        })
+    }
+    // 构造新闻列表数据
+    createNewsListData (data) {
+        data = data.map(item => {
+            let time = item.newsDate;
+            time = new Date(time).toLocaleDateString();
+            time = time.replace(/\//g, '-');
+            return {
+                id: item.id,
+                title: item.newsTitle,
+                newsFrom: item.newsFrom,
+                releaseTime: time
+            };
+        })
+        return data;
+    }
+
+    // 获取新闻列表
+    getNewsList () {
+        api.getNewsBaseInfo().then(result => {
+            console.log(result);
+            if (result.data.msg === 'ok') {
+                let { data } = result.data;
+                data = this.createNewsListData(data);
+                this.setState({
+                    newsList: data
+                })
+            }
+        })
+    }
+
+    componentDidMount () {
+        this.getNewsList()
     }
 
     render() {

@@ -10,6 +10,11 @@ function adminLogin (postData) {
     return baseAxios.post(`/adminLogin`, postData);
 }
 
+// 用户登录统计
+function saveLoginDate (postData) {
+    return baseAxios.post('/saveLoginDate', postData)
+}
+
 // 登录
 function login (userPhone, password) {
     return baseAxios.get(`/userLogin?phone=${userPhone}&password=${password}`)
@@ -97,6 +102,11 @@ function addLike (postData) {
     return baseAxios.post(`/addLike`, postData);
 }
 
+// 阅读
+function addRead (postData) {
+    return baseAxios.post('/addRead', postData);
+}
+
 // 转发动态
 function refDynamic (postData) {
     return baseAxios.post('/refDynamic', postData);
@@ -132,6 +142,41 @@ function getUserFansList (phone) {
     return baseAxios.get(`/getUserFansList?phone=${phone}`)
 }
 
+// 查询新闻基础信息
+function getNewsBaseInfo () {
+    return baseAxios.get('/getNewsBaseInfo');
+}
+
+// 查询新闻详情
+function getNewsItem (id) {
+    return baseAxios.get(`/getNewsItem?id=${id}`);
+}
+
+// 管理员端
+
+// 上传新闻表头
+function uploadNewsList_head (postData) {
+    return baseAxios.post('/uploadNewsListHead', postData)
+}
+// 上传新闻内容
+function uploadNewsList_content (postData) {
+    return baseAxios.post('/uploadNewsListContent', postData)
+}
+// 上传新闻图片
+function uploadNewsList_img (postData) {
+    return baseAxios.post('/uploadNewsListImg', postData)
+}
+
+//搜索新闻
+function searchNews (postData) {
+    return baseAxios.post('/searchNews', postData);
+}
+
+// 删除新闻
+function deleteNews (postData) {
+    return baseAxios.post('/deleteNews', postData);
+}
+
 export default {
     apiPath,
     adminLogin,
@@ -150,6 +195,7 @@ export default {
     pushComment,
     uploadUserImage,
     addLike,
+    addRead,
     delComment,
     refDynamic,
     saveBigImage,
@@ -157,5 +203,14 @@ export default {
     concernUser,
     cancelConcern,
     getUserConcernList,
-    getUserFansList
+    getUserFansList,
+    getNewsBaseInfo,
+    getNewsItem,
+    searchNews,
+    deleteNews,
+    // 管理员端
+    uploadNewsList_head,
+    uploadNewsList_content,
+    uploadNewsList_img,
+    saveLoginDate
 }

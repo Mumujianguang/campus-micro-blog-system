@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { messege, Input, Icon } from 'antd';
+import { Input, Icon, message } from 'antd';
 import EventPoint from './eventPoint/eventPoint';
 import { boundActions } from '@/redux';
+import uuid from 'uuid';
 import tools from '@/tools';
 import './uploadNews.less';
+import api from '../../../../api';
 
 export default class UploadNews extends Component {
     state = {
@@ -65,12 +67,58 @@ export default class UploadNews extends Component {
             eventPointList
         })
     }
-
+    // 上传
     uploadNews = () => {
-        const { eventPointList } = this.state;
-        console.log( eventPointList );
-    }
+        const { newsTitle, newsFrom, eventPointList } = this.state;
+        const newsId = uuid(); // 生成uuid
+        const nowTime = tools.getCurTime(); // 获取当前时间
 
+        // 新闻表头数据
+        const formData_head = {
+            id: newsId,
+            nowTime: nowTime,
+            title: newsTitle,
+            from: newsFrom
+        }
+
+        // 新闻内容数据
+        const formData_content = {
+            id: newsId
+        }
+
+        // 新闻图片数据
+        const formData_img = new FormData();
+        formData_img.append("id", newsId);
+        
+        eventPointList.forEach((item, index) => {
+            formData_content[`newsContent${index + 1}`] = item.content;
+            formData_img.append(`newsImage`, item.image);
+        })
+
+        // 异步任务数组
+        const promiseTaskArr = [
+            api.uploadNewsList_head(formData_head),
+            api.uploadNewsList_content(formData_content),
+            api.uploadNewsList_img(formData_img),
+        ]
+        
+        Promise.all(promiseTaskArr).then(result => {
+            console.log(result);
+            const flag = result.every(item => item.data.msg === "ok");
+            if (!flag) {
+                message.error("发布失败！")
+            }
+            message.success("发布成功！");
+            // 发布成功重置编辑面板
+            this.setState({
+                newsTitle: '',
+                newsFrom: '',
+                eventPointList: []
+            })
+            this.addEventPoint();
+        })
+    }
+    // 预览
     previewNewPage = async () => {
         let { newsTitle, newsFrom, eventPointList } = this.state;
         const nowTime = tools.getCurTime();

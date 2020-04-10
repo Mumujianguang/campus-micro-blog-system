@@ -189,8 +189,9 @@ export default class userInfoBox extends Component {
             }
             this.setState({
                 isConcern: true,
-                fansNum: this.state.fansNum + 1
+                fansNum: parseInt(this.state.fansNum)  + 1
             })
+            boundActions.createUpdateUserConcernNum(1);
         })
     }
 
@@ -207,8 +208,9 @@ export default class userInfoBox extends Component {
             }
             this.setState({
                 isConcern: false,
-                fansNum: this.state.fansNum - 1
+                fansNum: parseInt(this.state.fansNum) - 1
             })
+            boundActions.createUpdateUserConcernNum(-1);
         })
     }
 

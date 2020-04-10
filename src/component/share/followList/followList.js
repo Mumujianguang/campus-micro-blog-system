@@ -3,6 +3,7 @@ import UserAvatar from '@/component/share/userAvatar/userAvatar';
 import './followList.less';
 import LikeHeart from '../likeHeart/likeHeart';
 import { boundActions } from '@/redux/index';
+import * as defaultData from '@/asset/defaultData';
 import uuid from 'uuid';
 import api from '@/api';
 import { message } from 'antd';
@@ -24,6 +25,7 @@ export default class followList extends Component {
 
     // 检查图片路径类型
     checkImagePath = (filePath) => {
+        filePath = filePath ? filePath : defaultData.userImg
         if (filePath.indexOf("resource\\img") === -1) return filePath;
         return `${api.apiPath}/getPic?path=${filePath}`;
     }

@@ -4,6 +4,8 @@ import { Input, Icon, Button, Checkbox, message } from 'antd';
 import { boundActions, store } from '@/redux/index';
 import CookieController from 'js-cookie';
 import { withRouter } from 'react-router-dom';
+import uuid from 'uuid';
+import tools from '@/tools';
 import api from '@/api/index';
 
 class Login extends React.Component {
@@ -66,6 +68,9 @@ class Login extends React.Component {
                     CookieController.set("userPhone", userPhone, { expires: 1 });
                     // 提示
                     message.success("登录成功！");
+                    api.saveLoginDate({ id: uuid(), loginDate:  tools.getCurTime()}).then(result => {
+                        console.log(result);
+                    });
                     return;
                 }
 
@@ -92,7 +97,7 @@ class Login extends React.Component {
                 return;
             }
             message.success("登录成功！")
-            this.props.history.push("/admin")
+            this.props.history.push("/admin/index")
         })
     }
 

@@ -30,7 +30,7 @@ export default class userFollow extends Component {
         this.setUserFollowData();
     }
 
-    componentWillMount () {
+    UNSAFE_componentWillMount () {
         this.props.loading();
     }
 

@@ -58,9 +58,11 @@ const UpdateUserInfoReducer = (state = {}, { type, payload }) => {
         case actionType.DELETEUSERINFO:
             return {};
         case actionType.UPDATEUSERDYNAMICNUM:
-            return {...state, dynamicNum: parseInt(state.dynamicNum) + 1 };
+            const lastDynamicNum = state.dynamicNum ? state.dynamicNum : 0
+            return {...state, dynamicNum: parseInt(lastDynamicNum) + 1 };
         case actionType.UPDATEUSERCONCERNNUM:
-            return {...state, concernNum: parseInt(state.concernNum) + payload};
+            const lastConcernNum = state.concernNum ? state.concernNum : 0
+            return {...state, concernNum: parseInt(lastConcernNum) + payload};
         default:
             return state;
     }

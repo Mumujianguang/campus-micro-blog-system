@@ -11,7 +11,9 @@ export default class userNote extends Component {
     state = {
         dynamicList: []
     }
-    componentWillMount () {
+    
+    UNSAFE_componentWillMount () {
+        this.props.loading();
         const { userType } = this.props;
         let userPhone = "";
         if (userType === "other") {
@@ -32,9 +34,6 @@ export default class userNote extends Component {
     }
     componentDidMount () {
         this.props.loaded();
-    }
-    componentWillUnmount () {
-        this.props.loading();
     }
     render() {
         return (

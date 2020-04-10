@@ -55,12 +55,12 @@ export default class userSetting extends Component {
             return;
         }
         this.initGlobalUserInfo();
-        store.subscribe(() => {
-            this.initGlobalUserInfo();
-        })
+        // store.subscribe(() => {
+        //     this.initGlobalUserInfo();
+        // })
     }
 
-    componentWillUnmount () {
+    UNSAFE_componentWillMount () {
         this.props.loading();
     }
 
