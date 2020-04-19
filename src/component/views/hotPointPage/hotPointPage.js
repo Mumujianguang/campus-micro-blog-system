@@ -184,13 +184,21 @@ export default class hotPointPage extends Component {
             message.warning("登录后才能发表动态嗷 ~ ");
             return;
         }
+        if (!curSelectHotPoint) {
+            message.warning("请为动态添加话题 ~ ");
+            return;
+        }
+        if (!userSay) {
+            message.warning("空内容不能发布动态嗷 ~ ");
+            return;
+        }
         if ((selectStatus === 'bigImg' && bigImgSrc === '') || (selectStatus === 'nineImg' && nineImgSrcArr.length === 0)) {
             message.warning("还没有上传图片哦！");
             return;
         } 
         
         const postData = {
-            topic: curSelectHotPoint.slice(1, curSelectHotPoint.length - 1),
+            topic: curSelectHotPoint.replace(/#/g, ''),
             id: uuid(),
             type: selectStatus,
             phone: phone,

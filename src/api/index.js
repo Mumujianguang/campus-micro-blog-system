@@ -59,6 +59,11 @@ function getDynamicInfoByReadNum () {
     return baseAxios.get('/getDynamicInfoByReadNum')
 }
 
+// 获取所有动态信息
+function getAllDynamic () {
+    return baseAxios.get('/getAllDynamic');
+}
+
 // 发表动态 & 纯文本
 function pushDynamic (postData) {
     return baseAxios.post('/pushDynamic', postData);
@@ -86,6 +91,16 @@ function pushComment (postData) {
 // 删除评论
 function delComment (postData) {
     return baseAxios.post('/delComment', postData);
+}
+
+// 获取评论数
+function getCommentNum (id) {
+    return baseAxios.get(`getCommentNum?id=${id}`);
+}
+
+// 获取大图资源
+function getBigImg (id) {
+    return baseAxios.get(`getBigImg?id=${id}`);
 }
 
 // 上传图片
@@ -177,6 +192,17 @@ function deleteNews (postData) {
     return baseAxios.post('/deleteNews', postData);
 }
 
+// 获取用户登录统计
+function getLoginDate () {
+    return baseAxios.get('/getLoginDate')
+}
+
+function updateRefNum (postData) {
+    return baseAxios.post('/updateRefNum', postData);
+}
+
+
+
 export default {
     apiPath,
     adminLogin,
@@ -189,13 +215,17 @@ export default {
     getTopicList,
     getDynamicInfoByReadNum,
     getDynamicInfoByUserPhone,
+    getAllDynamic,
+    getBigImg,
     pushDynamic,
     pushDynamicBigImg,
     pushDynamicNineImg,
     pushComment,
     uploadUserImage,
+    updateRefNum,
     addLike,
     addRead,
+    getCommentNum,
     delComment,
     refDynamic,
     saveBigImage,
@@ -212,5 +242,6 @@ export default {
     uploadNewsList_head,
     uploadNewsList_content,
     uploadNewsList_img,
-    saveLoginDate
+    saveLoginDate,
+    getLoginDate
 }

@@ -72,7 +72,18 @@ export default class UploadNews extends Component {
         const { newsTitle, newsFrom, eventPointList } = this.state;
         const newsId = uuid(); // 生成uuid
         const nowTime = tools.getCurTime(); // 获取当前时间
-
+        if (!newsTitle) {
+            message.warning("新闻标题不能为空 ~ ");
+            return;
+        }
+        if (!newsFrom) {
+            message.warning("新闻发布人不能为空 ~ ");
+            return;
+        }
+        if (!eventPointList.length) {
+            message.warning("请编辑新闻内容 ~ ");
+            return;
+        }
         // 新闻表头数据
         const formData_head = {
             id: newsId,
@@ -80,12 +91,10 @@ export default class UploadNews extends Component {
             title: newsTitle,
             from: newsFrom
         }
-
         // 新闻内容数据
         const formData_content = {
             id: newsId
         }
-
         // 新闻图片数据
         const formData_img = new FormData();
         formData_img.append("id", newsId);
@@ -94,14 +103,12 @@ export default class UploadNews extends Component {
             formData_content[`newsContent${index + 1}`] = item.content;
             formData_img.append(`newsImage`, item.image);
         })
-
         // 异步任务数组
         const promiseTaskArr = [
             api.uploadNewsList_head(formData_head),
             api.uploadNewsList_content(formData_content),
             api.uploadNewsList_img(formData_img),
         ]
-        
         Promise.all(promiseTaskArr).then(result => {
             console.log(result);
             const flag = result.every(item => item.data.msg === "ok");

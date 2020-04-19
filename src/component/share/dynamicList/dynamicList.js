@@ -105,9 +105,9 @@ export default class dynamicList extends Component {
             return;
         }
         
-        const {type, topic, userNick, releaseTime, content, forward_num, refFrom } = this.state;
-
+        const {id, type, topic, userNick, releaseTime, content, forward_num, refFrom } = this.state;
         const newDynamicUuid = uuid();
+        const newForward_num = parseInt(forward_num) + 1;
         const paramsData = {
             topic,
 	        id: newDynamicUuid,
@@ -117,7 +117,7 @@ export default class dynamicList extends Component {
 	        content: content.text,
 	        read_num: 0,
 	        like_num: 0,
-	        forward_num,
+	        forward_num: newForward_num,
 	        from_user: refFrom.userNick ? refFrom.userNick : userNick,
 	        from_releasetime: refFrom.releaseTime ? refFrom.releaseTime : releaseTime
         }
@@ -140,6 +140,8 @@ export default class dynamicList extends Component {
                 })
             }
             message.success("转发成功！");
+            // 更新动态的被转发数
+            api.updateRefNum({ id, forward_num: newForward_num });
             boundActions.createUpdateUserDynamicNum();
         })
     }
@@ -154,7 +156,6 @@ export default class dynamicList extends Component {
         }
         api.addLike({ id, likeNum: ++likeNum })
             .then(result => {
-                console.log(result);
                 const { msg } = result.data;
                 if (msg === 'ok') {
                     this.likeStatus = true;
@@ -188,7 +189,11 @@ export default class dynamicList extends Component {
     }
 
     componentDidMount = () => {
+        // 用户修改头像后同步修改动态中的用户头像
         store.subscribe(() => {
+            const { userPhone } = this.state;
+            const curUser = CookieController.get('userPhone');
+            if (userPhone !== curUser) return;
             const newImage = store.getState().userInfo.userImage;
             this.setState({
                 imgSrc: newImage
@@ -203,7 +208,6 @@ export default class dynamicList extends Component {
         if (this.canReadStatus) {
             api.addRead({ id, readNum: ++readNum })
                 .then(result => {
-                    console.log(result);
                     const { msg } = result.data;
                     if (msg === 'ok') {
                         this.canReadStatus = false;

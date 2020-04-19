@@ -65,7 +65,7 @@ export default class commentList extends Component {
                  onMouseLeave={ this.hideDelCommentBtn }>
                 <div className="commentatorInfo">
                     <div className="commentatorUser">
-                        <UserAvatar imgSrc={ this.checkImagePath(userImage) } size={ 25 } userPhone={ userPhone } />
+                        <UserAvatar imgSrc={ this.checkImagePath(userImage) } size={ 25 } userPhone={ commentUserPhone } />
                         <div className="userNick">{ userNick }</div>
                         <div className="commentTime">{ `回复于 ${ commentTime }` }</div>
                     </div>

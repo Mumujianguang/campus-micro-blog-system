@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Table, message, Modal } from 'antd';
 import api from '@/api';
-import uuid from 'uuid';
 import './newsControl.less';
 
 const { confirm } = Modal;
@@ -42,11 +41,12 @@ export default class index extends Component {
 
     // 构造新闻列表数据
     createNewsListData (data) {
-        data = data.map(item => {
+        data = data.map((item, index) => {
             let time = item.newsDate;
             time = new Date(time).toLocaleDateString();
             time = time.replace(/\//g, '-');
             return {
+                key: index,
                 id: item.id,
                 title: item.newsTitle,
                 newsFrom: item.newsFrom,
@@ -105,6 +105,8 @@ export default class index extends Component {
                 this.deleteNews();
             },
             onCancel() {},
+            okText: "确认",
+            cancelText: "取消"
         });
     }
 
@@ -115,10 +117,10 @@ export default class index extends Component {
 
     rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-          console.log(selectedRows);
-          this.setState({
-            selectedRows
-          })
+            console.log(selectedRows);
+            this.setState({
+                selectedRows
+            })
         }
     }
 
@@ -135,7 +137,7 @@ export default class index extends Component {
           title: '发布时间',
           dataIndex: 'releaseTime',
         },
-      ];
+    ];
 
     render() {
         const { searchTitle, newsList } = this.state;
@@ -158,9 +160,9 @@ export default class index extends Component {
                 </div>
                 <div className="newsList">
                     <Table rowSelection={this.rowSelection}
-                           rowKey={ uuid() }
                            columns={this.columns} 
                            dataSource={newsList}
+                           rowKey={record => record.id}
                            pagination={{
                                 defaultPageSize: 5
                            }} />
